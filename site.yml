@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: False
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: False
+    when: ansible_distribution == "CentOS"
+
+- hosts: all
+  become: true
+  roles:
+    - prometheus
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Creating Banner Motd
+    debug:
+      msg: "Playbook Prometheus by Lomibao"
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Creating Banner Motd
+    debug:
+      msg: "Playbook Prometheus by Lomibao"
+    when: ansible_distribution == "CentOS"
+
